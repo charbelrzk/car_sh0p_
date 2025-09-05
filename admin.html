@@ -10,10 +10,14 @@ image.png
 </head>
 <body>
 	<header>
-		<h1>Admin</h1>
+		<a href="index.html" class="logo">
+			<span class="logo-icon">🚗</span>
+			Car Shop Admin
+		</a>
 		<nav>
 			<a href="index.html">Home</a>
 			<a href="inventory.html">Inventory</a>
+			<a href="compare.html">Compare</a>
 			<button id="logoutBtn" style="background:#dc2626;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;margin-left:10px;">Logout</button>
 		</nav>
 	</header>
@@ -65,21 +69,15 @@ image.png
 					<div class="image-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
 						<div>
 							<label style="display:block;color:#9aa3b2;margin-bottom:5px;font-size:14px;">Thumbnail (Main Image):</label>
-							<input name="thumbnail" placeholder="Thumbnail URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="thumbFile" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+							<input name="thumbnail" placeholder="https://raw.githubusercontent.com/charbelrzk/charbelrzk.github.io/main/photos/2024.jpg" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
 						</div>
 						<div>
 							<label style="display:block;color:#9aa3b2;margin-bottom:5px;font-size:14px;">Gallery Images:</label>
 							<input name="image1" placeholder="Image 1 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="galleryFile1" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
 							<input name="image2" placeholder="Image 2 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="galleryFile2" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
 							<input name="image3" placeholder="Image 3 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="galleryFile3" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
 							<input name="image4" placeholder="Image 4 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="galleryFile4" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input name="image5" placeholder="Image 5 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="galleryFile5" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+							<input name="image5" placeholder="Image 5 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
 						</div>
 					</div>
 				</div>
@@ -152,21 +150,15 @@ image.png
 					<div class="image-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
 						<div>
 							<label style="display:block;color:#9aa3b2;margin-bottom:5px;font-size:14px;">Thumbnail (Main Image):</label>
-							<input id="editThumbnail" name="thumbnail" placeholder="Thumbnail URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="editThumbFile" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+							<input id="editThumbnail" name="thumbnail" placeholder="https://raw.githubusercontent.com/charbelrzk/charbelrzk.github.io/main/photos/2024.jpg" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
 						</div>
 						<div>
 							<label style="display:block;color:#9aa3b2;margin-bottom:5px;font-size:14px;">Gallery Images:</label>
 							<input id="editImage1" name="image1" placeholder="Image 1 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="editGalleryFile1" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
 							<input id="editImage2" name="image2" placeholder="Image 2 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="editGalleryFile2" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
 							<input id="editImage3" name="image3" placeholder="Image 3 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="editGalleryFile3" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
 							<input id="editImage4" name="image4" placeholder="Image 4 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="editGalleryFile4" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="editImage5" name="image5" placeholder="Image 5 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
-							<input id="editGalleryFile5" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+							<input id="editImage5" name="image5" placeholder="Image 5 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
 						</div>
 					</div>
 				</div>
@@ -187,11 +179,31 @@ image.png
 		</div>
 	</main>
 
+	<footer>
+		<div class="footer-content">
+			<a href="index.html" class="footer-brand">
+				<span class="footer-icon">🚗</span>
+				Car Shop Admin
+			</a>
+			<div class="footer-links">
+				<a href="mailto:sales@example.com">📧 Contact</a>
+				<a href="tel:+1234567890">📞 Call</a>
+				<a href="https://instagram.com/yourdealership" target="_blank" rel="noreferrer">📷 Instagram</a>
+			</div>
+		</div>
+		<div class="footer-info">
+			© <span id="footerYear"></span> Car Shop - Premium Automotive Solutions
+		</div>
+	</footer>
+
 	<script type="module">
 		import { signIn, signOut } from './firebase.js';
 		
 		// Wait for DOM to be ready
 		document.addEventListener('DOMContentLoaded', function() {
+			// Set footer year
+			var fy = document.getElementById('footerYear');
+			if (fy) fy.textContent = new Date().getFullYear();
 			var gate = document.getElementById('loginGate');
 			var main = document.getElementById('adminMain');
 			var form = document.getElementById('loginForm');

@@ -10,11 +10,15 @@
 	<header>
 		<div style="display:flex;align-items:center;gap:10px">
 			<button id="openDrawer" class="hamburger" aria-label="Open menu"><span></span></button>
-			<h1>Car Shop</h1>
+			<a href="index.html" class="logo">
+				<span class="logo-icon">🚗</span>
+				Car Shop
+			</a>
 		</div>
 		<nav>
 			<a href="inventory.html">Inventory</a>
 			<a href="favorites.html">Favorites</a>
+			<a href="compare.html">Compare</a>
 			<a href="admin.html">Admin</a>
 		</nav>
 	</header>
@@ -24,6 +28,7 @@
 		<a href="index.html">Home</a>
 		<a href="inventory.html">Inventory</a>
 		<a href="favorites.html">Favorites</a>
+		<a href="compare.html">Compare</a>
 		<a href="admin.html">Admin</a>
 	</aside>
 
@@ -36,13 +41,13 @@
 			</div>
 		</section>
 
-		<section class="section">
-			<h3 class="section-title">Why choose us</h3>
+		<section class="section why-choose-us">
+			<h3 class="section-title">Why Choose Us</h3>
 			<ul class="badges">
-				<li class="badge">Best prices guaranteed</li>
-				<li class="badge">Certified inspected vehicles</li>
-				<li class="badge">Fast financing approval</li>
-				<li class="badge">Trusted local dealership</li>
+				<li class="badge">Best prices guaranteed with our price match policy</li>
+				<li class="badge">Certified inspected vehicles with full warranty</li>
+				<li class="badge">Fast financing approval in under 24 hours</li>
+				<li class="badge">Trusted local dealership with 15+ years experience</li>
 			</ul>
 		</section>
 
@@ -55,13 +60,19 @@
 	</main>
 
 	<footer>
-		<div>
-			© <span id="footerYear"></span> Car Shop
+		<div class="footer-content">
+			<a href="index.html" class="footer-brand">
+				<span class="footer-icon">🚗</span>
+				Car Shop
+			</a>
+			<div class="footer-links">
+				<a href="mailto:sales@example.com">📧 Contact</a>
+				<a href="tel:+1234567890">📞 Call</a>
+				<a href="https://instagram.com/yourdealership" target="_blank" rel="noreferrer">📷 Instagram</a>
+			</div>
 		</div>
-		<div class="contact">
-			<a href="mailto:sales@example.com">sales@example.com</a>
-			<a href="tel:+1234567890">+1 (234) 567-890</a>
-			<a href="https://instagram.com/yourdealership" target="_blank" rel="noreferrer">Instagram</a>
+		<div class="footer-info">
+			© <span id="footerYear"></span> Car Shop - Premium Automotive Solutions
 		</div>
 	</footer>
 	<script>

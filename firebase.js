@@ -73,8 +73,8 @@ export async function signIn(email, password) {
 export async function signOut() { return fbSignOut(auth); }
 
 // Admin: create/update/delete cars
-export async function createCar(car, files = { thumbnailFile: null, galleryFiles: [] }) {
-    console.log('createCar called with:', { car, files });
+export async function createCar(car) {
+    console.log('createCar called with:', car);
     
     try {
         // Ensure user is authenticated before proceeding
@@ -89,20 +89,6 @@ export async function createCar(car, files = { thumbnailFile: null, galleryFiles
         if (!toCreate.images) toCreate.images = [];
 
         console.log('Car data to create:', toCreate);
-
-        // Upload files if provided
-        if (files && files.thumbnailFile) {
-            console.log('Uploading thumbnail file...');
-            const url = await uploadImage(files.thumbnailFile, `thumbnails/${Date.now()}_${files.thumbnailFile.name}`);
-            toCreate.thumbnail = url;
-        }
-        if (files && files.galleryFiles && files.galleryFiles.length) {
-            console.log('Uploading gallery files...');
-            for (const file of files.galleryFiles) {
-                const url = await uploadImage(file, `gallery/${Date.now()}_${file.name}`);
-                toCreate.images.push(url);
-            }
-        }
 
         console.log('Saving to Firestore...');
         const ref = await addDoc(carsCol, toCreate);

@@ -3,8 +3,6 @@ import { signIn, listCars, createCar, updateCar, removeCar } from './firebase.js
 (function(){
 	const tableBody = document.querySelector('#carsTable tbody');
     const createForm = document.getElementById('createForm');
-    const thumbFile = document.getElementById('thumbFile');
-    const galleryFiles = document.getElementById('galleryFiles');
 
     async function refresh() {
         const cars = await listCars();
@@ -15,21 +13,37 @@ import { signIn, listCars, createCar, updateCar, removeCar } from './firebase.js
         if (!tableBody) return;
         tableBody.innerHTML = cars.map(c => `
             <tr data-id="${c.id}">
-                <td>
-                    <div style="display:grid;gap:6px">
-                        <strong>${c.make || ''} ${c.model || ''}</strong>
-                        <span style="color:#9aa3b2;font-size:14px">${c.year || ''} • ${c.body || ''} • ${c.color || ''}</span>
+                <td style="vertical-align:middle;height:60px;">
+                    <div style="display:flex;flex-direction:column;justify-content:center;height:100%;">
+                        <strong style="font-size:16px;line-height:1.2;">${c.make || ''} ${c.model || ''}</strong>
+                        <span style="color:#9aa3b2;font-size:14px;line-height:1.2;">${c.year || ''} • ${c.body || ''} • ${c.color || ''}</span>
                     </div>
-			</td>
-                <td><strong>$${c.price ? c.price.toLocaleString() : '0'}</strong></td>
-                <td>${c.mileage ? c.mileage.toLocaleString() : '0'} mi</td>
-                <td>${c.featured ? '⭐ Featured' : 'Regular'}</td>
-			<td class="admin-actions">
-                    <button class="edit-btn" style="background:#3b82f6;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;margin-right:5px;">Edit</button>
-                    <button class="delete" style="background:#dc2626;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;">Delete</button>
-			</td>
-		</tr>
-	`).join('');
+                </td>
+                <td style="vertical-align:middle;text-align:center;height:60px;">
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;">
+                        <strong style="font-size:16px;color:#3b82f6;">$${c.price ? c.price.toLocaleString() : '0'}</strong>
+                    </div>
+                </td>
+                <td style="vertical-align:middle;text-align:center;height:60px;">
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;">
+                        <span style="font-size:14px;">${c.mileage ? c.mileage.toLocaleString() : '0'} mi</span>
+                    </div>
+                </td>
+                <td style="vertical-align:middle;text-align:center;height:60px;">
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;">
+                        <span style="font-size:14px;color:${c.featured ? '#f59e0b' : '#9aa3b2'};">
+                            ${c.featured ? '⭐ Featured' : 'Regular'}
+                        </span>
+                    </div>
+                </td>
+                <td style="vertical-align:middle;text-align:center;height:60px;" class="admin-actions">
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;gap:8px;">
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
 
         tableBody.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', onEdit));
         tableBody.querySelectorAll('.delete').forEach(btn => btn.addEventListener('click', onDelete));
@@ -222,23 +236,7 @@ async function onDelete(e) {
             
             console.log('Car payload:', payload);
             
-            // Collect file uploads
-            const files = {
-                thumbnailFile: thumbFile && thumbFile.files && thumbFile.files[0] ? thumbFile.files[0] : null,
-                galleryFiles: []
-            };
-            
-            // Add gallery files
-            for (let i = 1; i <= 5; i++) {
-                const fileInput = document.getElementById(`galleryFile${i}`);
-                if (fileInput && fileInput.files && fileInput.files[0]) {
-                    files.galleryFiles.push(fileInput.files[0]);
-                }
-            }
-            
-            console.log('Files:', files);
-            
-            const result = await createCar(payload, files);
+            const result = await createCar(payload);
             console.log('Car created successfully:', result);
             
             createForm.reset();
@@ -249,20 +247,7 @@ async function onDelete(e) {
             
         } catch (error) {
             console.error('Error creating car:', error);
-            let errorMessage = 'Error creating car: ' + error.message;
-            
-            // Provide specific error messages for common issues
-            if (error.code === 'storage/unauthorized') {
-                errorMessage = 'Image upload failed: You need to configure Firebase Storage rules to allow authenticated users to upload files.';
-            } else if (error.code === 'storage/object-not-found') {
-                errorMessage = 'Image upload failed: Storage bucket not found. Check your Firebase configuration.';
-            } else if (error.code === 'storage/quota-exceeded') {
-                errorMessage = 'Image upload failed: Storage quota exceeded.';
-            } else if (error.message.includes('storage')) {
-                errorMessage = 'Image upload failed: ' + error.message + '. Check Firebase Storage configuration.';
-            }
-            
-            alert(errorMessage);
+            alert('Error creating car: ' + error.message);
         }
     });
 

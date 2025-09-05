@@ -115,7 +115,7 @@ function renderGrid(data) {
 				<div class="row"><span>${car.body || ''} • ${car.color || ''}</span><span>${car.mileage ? car.mileage.toLocaleString() : '0'} mi</span></div>
 				<div class="actions">
 					<a class="view" href="car.html?id=${car.id}">View Details</a>
-					<button class="fav" data-id="${car.id}" title="Add to favorites">♥</button>
+					<button class="fav" data-id="${car.id}" title="Add to favorites">👍</button>
 				</div>
 			</div>
 		</div>

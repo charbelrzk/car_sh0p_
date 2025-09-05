@@ -54,7 +54,7 @@ function renderFavorites() {
                 </div>
                 <div class="actions">
                     <a class="view" href="car.html?id=${car.id}">View Details</a>
-                    <button class="fav active" data-id="${car.id}" title="Remove from favorites">♥</button>
+                    <button class="fav active" data-id="${car.id}" title="Remove from favorites">👍</button>
                 </div>
             </div>
         </div>
