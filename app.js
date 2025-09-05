@@ -1,3 +1,4 @@
+import { listCars, createLead } from './firebase.js';
 const grid = document.getElementById('grid');
 const pager = document.getElementById('pager');
 const qEl = document.getElementById('q');
@@ -13,6 +14,15 @@ const modalBody = document.getElementById('modalBody');
 const STORAGE_KEY = 'carshop_cars';
 const LEADS_KEY = 'carshop_leads';
 const FAV_KEY = 'carshop_favorites';
+
+let ALL_CARS = [];
+async function loadCarsFromFirebase() {
+	try {
+		ALL_CARS = await listCars();
+	} catch (e) {
+		ALL_CARS = [];
+	}
+}
 
 function loadCarsFromStorage() {
 	try {
@@ -48,8 +58,7 @@ function getMeta(cars) {
 }
 
 function loadFilters() {
-	const cars = loadCarsFromStorage();
-	const meta = getMeta(cars);
+	const meta = getMeta(ALL_CARS);
 	if (makeEl) makeEl.innerHTML = `<option value="">Make</option>` + meta.makes.map(v => `<option>${v}</option>`).join('');
 	if (modelEl) modelEl.innerHTML = `<option value="">Model</option>` + meta.models.map(v => `<option>${v}</option>`).join('');
 	if (yearEl) yearEl.innerHTML = `<option value="">Year</option>` + meta.years.map(v => `<option>${v}</option>`).join('');
@@ -148,8 +157,7 @@ function loadCarsClient() {
 	if (modelEl) modelEl.value = state.model;
 	if (yearEl) yearEl.value = state.year;
 	if (sortEl) sortEl.value = state.sort;
-	const all = loadCarsFromStorage();
-	const filtered = applyFilters(all, state);
+	const filtered = applyFilters(ALL_CARS, state);
 	const pageSize = 12;
 	const { data, total } = paginate(filtered, Math.max(1, state.page), pageSize);
 	renderGrid(data);
@@ -157,7 +165,7 @@ function loadCarsClient() {
 }
 
 function openModal(id) {
-	const car = loadCarsFromStorage().find(c => c.id === id);
+	const car = ALL_CARS.find(c => c.id === id);
 	if (!car) return;
 	modalBody.innerHTML = `
 		<div class="gallery">${(car.images || []).map(u => `<img src="${u}" alt="">`).join('')}</div>
@@ -176,16 +184,12 @@ function openModal(id) {
 		</div>`;
 	const form = document.getElementById('leadForm');
 	const leadMsg = document.getElementById('leadMsg');
-	form.addEventListener('submit', (e) => {
+	form.addEventListener('submit', async (e) => {
 		e.preventDefault();
 		const fd = new FormData(form);
 		const payload = Object.fromEntries(fd.entries());
-		payload.id = crypto.randomUUID();
 		payload.carId = car.id;
-		payload.createdAt = new Date().toISOString();
-		const leads = JSON.parse(localStorage.getItem(LEADS_KEY) || '[]');
-		leads.push(payload);
-		localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
+		await createLead(payload);
 		leadMsg.textContent = 'Thanks! We will contact you soon.';
 		form.reset();
 	});
@@ -196,12 +200,15 @@ if (closeModal) closeModal.addEventListener('click', () => modal.classList.add('
 if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
 
 if (grid) {
-	seedIfEmpty();
-	loadFilters();
-	loadCarsClient();
+	(async function(){
+		await loadCarsFromFirebase();
+		loadFilters();
+		loadCarsClient();
+	})();
 	if (applyBtn) applyBtn.addEventListener('click', () => {
 		const s = { ...readQuery(), q: (qEl && qEl.value || '').trim(), make: makeEl ? makeEl.value : '', model: modelEl ? modelEl.value : '', year: yearEl ? yearEl.value : '', sort: sortEl ? sortEl.value : 'createdAt:desc', page: 1 };
 		writeQuery(s);
 		loadCarsClient();
 	});
 }
+

@@ -1,3 +1,5 @@
+
+image.png
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,6 +14,7 @@
 		<nav>
 			<a href="index.html">Home</a>
 			<a href="inventory.html">Inventory</a>
+			<button id="logoutBtn" style="background:#dc2626;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;margin-left:10px;">Logout</button>
 		</nav>
 	</header>
 
@@ -21,7 +24,7 @@
 			<h2 style="margin:0 0 10px">Admin Login</h2>
 			<p style="color:#9aa3b2;margin:0 0 12px">Enter credentials to manage cars.</p>
 			<form id="loginForm" style="display:grid;gap:8px">
-				<input id="adminUser" placeholder="Username" style="padding:10px 12px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:8px" />
+				<input id="adminUser" type="email" placeholder="Email" style="padding:10px 12px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:8px" />
 				<input id="adminPass" type="password" placeholder="Password" style="padding:10px 12px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:8px" />
 				<button type="submit" style="padding:10px 12px;background:#3b82f6;color:#fff;border:none;border-radius:8px;cursor:pointer">Login</button>
 				<div id="loginMsg" style="color:#ef4444"></div>
@@ -63,8 +66,10 @@
 	</main>
 
 	<script type="module">
-		import { signIn, listCars, createCar, updateCar, removeCar } from './firebase.js';
-		(function(){
+		import { signIn, signOut } from './firebase.js';
+		
+		// Wait for DOM to be ready
+		document.addEventListener('DOMContentLoaded', function() {
 			var gate = document.getElementById('loginGate');
 			var main = document.getElementById('adminMain');
 			var form = document.getElementById('loginForm');
@@ -73,20 +78,54 @@
 			var msg = document.getElementById('loginMsg');
 			var OK = localStorage.getItem('carshop_admin_authed') === 'true';
 			function showApp(){ if (gate) gate.style.display='none'; if (main) main.style.display=''; }
-			if (OK) { showApp(); }
-			if (form) form.addEventListener('submit', async function(e){
-				e.preventDefault();
-				try {
-					await signIn(user.value, pass.value);
-					localStorage.setItem('carshop_admin_authed','true');
-					showApp();
+			// Don't auto-show app, always require fresh login
+			// if (OK) { showApp(); }
+			if (form) {
+				form.addEventListener('submit', async function(e){
+					e.preventDefault();
+					msg.textContent = '';
+					try {
+					const userCredential = await signIn(user.value, pass.value);
+					console.log('Login successful:', userCredential);
+					if (userCredential && userCredential.uid) {
+						localStorage.setItem('carshop_admin_authed','true');
+						showApp();
+					} else {
+						msg.textContent = 'Login failed: Invalid response from server';
+					}
 				} catch(err) {
-					msg.textContent = 'Invalid credentials';
+					console.error('Login error:', err);
+					if (err.code === 'auth/user-not-found') {
+						msg.textContent = 'User not found. Check email.';
+					} else if (err.code === 'auth/wrong-password') {
+						msg.textContent = 'Wrong password.';
+					} else if (err.code === 'auth/invalid-email') {
+						msg.textContent = 'Invalid email format.';
+					} else if (err.code === 'auth/too-many-requests') {
+						msg.textContent = 'Too many failed attempts. Try again later.';
+					} else {
+						msg.textContent = 'Login failed: ' + (err.message || 'Unknown error');
+					}
 				}
 			});
-		})();
+			}
+
+			// Logout functionality
+			const logoutBtn = document.getElementById('logoutBtn');
+			if (logoutBtn) {
+				logoutBtn.addEventListener('click', async function() {
+					try {
+						await signOut();
+						localStorage.removeItem('carshop_admin_authed');
+						location.reload();
+					} catch (err) {
+						console.error('Logout error:', err);
+					}
+				});
+			}
+		});
 	</script>
-	<script src="admin.js"></script>
+	<script type="module" src="./admin.js"></script>
 </body>
 </html>
 
