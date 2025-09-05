@@ -1,19 +1,119 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Car Shop</title>
+	<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <link rel="stylesheet" href="2nd.css">
-   <div class="block1"></div> 
-     <div class="blocK">
-        <div class="m"></div>
-        <p> waynik</p>
-    </div>
+	<header>
+		<div style="display:flex;align-items:center;gap:10px">
+			<button id="openDrawer" class="hamburger" aria-label="Open menu"><span></span></button>
+			<h1>Car Shop</h1>
+		</div>
+		<nav>
+			<a href="inventory.html">Inventory</a>
+			<a href="favorites.html">Favorites</a>
+			<a href="admin.html">Admin</a>
+		</nav>
+	</header>
+	<div id="backdrop" class="backdrop"></div>
+	<aside id="drawer" class="drawer" aria-label="Site menu">
+		<h4>Navigate</h4>
+		<a href="index.html">Home</a>
+		<a href="inventory.html">Inventory</a>
+		<a href="favorites.html">Favorites</a>
+		<a href="admin.html">Admin</a>
+	</aside>
 
+	<main>
+		<section class="hero">
+			<div class="hero-text">
+				<h2 class="reveal-up">Find your next car</h2>
+				<p class="reveal-up" style="transition-delay:.05s">Browse our curated selection and send an inquiry in seconds.</p>
+				<a class="btn reveal-up" style="transition-delay:.1s" href="inventory.html">Browse Inventory</a>
+			</div>
+		</section>
+
+		<section class="section">
+			<h3 class="section-title">Why choose us</h3>
+			<ul class="badges">
+				<li class="badge">Best prices guaranteed</li>
+				<li class="badge">Certified inspected vehicles</li>
+				<li class="badge">Fast financing approval</li>
+				<li class="badge">Trusted local dealership</li>
+			</ul>
+		</section>
+
+		
+
+		<section class="section">
+			<h3 class="section-title">Featured vehicles</h3>
+			<div id="featured" class="featured-grid"></div>
+		</section>
+	</main>
+
+	<footer>
+		<div>
+			© <span id="footerYear"></span> Car Shop
+		</div>
+		<div class="contact">
+			<a href="mailto:sales@example.com">sales@example.com</a>
+			<a href="tel:+1234567890">+1 (234) 567-890</a>
+			<a href="https://instagram.com/yourdealership" target="_blank" rel="noreferrer">Instagram</a>
+		</div>
+	</footer>
+	<script>
+		var fy = document.getElementById('footerYear');
+		if (fy) fy.textContent = new Date().getFullYear();
+
+		const STORAGE_KEY = 'carshop_cars';
+		function loadCarsFromStorage(){
+			try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+		}
+		// drawer toggle
+		(function(){
+			var drawer = document.getElementById('drawer');
+			var openBtn = document.getElementById('openDrawer');
+			var backdrop = document.getElementById('backdrop');
+			function close(){ drawer.classList.remove('open'); backdrop.classList.remove('show'); }
+			function open(){ drawer.classList.add('open'); backdrop.classList.add('show'); }
+			if (openBtn) openBtn.addEventListener('click', open);
+			if (backdrop) backdrop.addEventListener('click', close);
+		})();
+		function renderFeatured(){
+			const wrap = document.getElementById('featured');
+			if (!wrap) return;
+			const all = loadCarsFromStorage();
+			const featured = all.filter(c => c.featured);
+			const fallback = all.slice().sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
+			const pick = (featured.length ? featured : fallback).slice(0, 6);
+			wrap.innerHTML = pick.map((car,i)=>`
+				<div class="card fade-in" style="animation-delay:${i*60}ms">
+					<img src="${car.thumbnail}" alt="${car.make} ${car.model}" />
+					<div class="content">
+						<div class="row"><strong>${car.year} ${car.make} ${car.model}</strong><span>$${car.price.toLocaleString()}</span></div>
+						<div class="row"><span>${car.body || ''} • ${car.color || ''}</span><span>${car.mileage.toLocaleString()} mi</span></div>
+						<a class="btn" href="inventory.html?q=${encodeURIComponent(car.make + ' ' + car.model)}">View</a>
+					</div>
+				</div>
+			`).join('');
+		}
+		// quick search removed
+		function runReveal(){
+			var els = Array.from(document.querySelectorAll('.reveal-up'));
+			var onScroll = function(){
+				els.forEach(function(el){
+					var rect = el.getBoundingClientRect();
+					if (rect.top < window.innerHeight - 40) el.classList.add('revealed');
+				});
+			};
+			onScroll();
+			window.addEventListener('scroll', onScroll);
+		}
+		renderFeatured();
+		runReveal();
+	</script>
 </body>
 </html>
-
-

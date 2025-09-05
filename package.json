@@ -1,0 +1,10 @@
+{
+  "name": "car-shop",
+  "version": "1.0.0",
+  "description": "Interactive car shop website with Express and SQLite",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Favorites</title>
+	<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+	<header>
+		<h1>Favorites</h1>
+		<nav>
+			<a href="index.html">Home</a>
+			<a href="inventory.html">Inventory</a>
+		</nav>
+	</header>
+	<main>
+		<section class="section">
+			<div id="grid" class="grid"></div>
+		</section>
+	</main>
+	<script>
+		const STORAGE_KEY = 'carshop_cars';
+		const FAV_KEY = 'carshop_favorites';
+		function loadCars(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; } }
+		function loadFavs(){ try { return new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]')); } catch { return new Set(); } }
+		function render(){
+			const favs = loadFavs();
+			const cars = loadCars().filter(c => favs.has(c.id));
+			document.getElementById('grid').innerHTML = cars.map(car => `
+				<div class="card">
+					<img src="${car.thumbnail}" alt="${car.make} ${car.model}" />
+					<div class="content">
+						<div class="row"><strong>${car.year} ${car.make} ${car.model}</strong><span>$${car.price.toLocaleString()}</span></div>
+						<div class="row"><span>${car.body || ''} • ${car.color || ''}</span><span>${car.mileage.toLocaleString()} mi</span></div>
+						<a class="view" href="car.html?id=${car.id}">View</a>
+					</div>
+				</div>
+			`).join('');
+		}
+		render();
+	</script>
+</body>
+</html>
+

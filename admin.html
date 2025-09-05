@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Admin - Car Shop</title>
+	<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+	<header>
+		<h1>Admin</h1>
+		<nav>
+			<a href="index.html">Home</a>
+			<a href="inventory.html">Inventory</a>
+		</nav>
+	</header>
+
+	<!-- Simple client-side login gate -->
+	<div id="loginGate" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:2000;">
+		<div style="width:min(420px,92vw);background:#171a21;border:1px solid #242938;border-radius:12px;padding:18px;">
+			<h2 style="margin:0 0 10px">Admin Login</h2>
+			<p style="color:#9aa3b2;margin:0 0 12px">Enter credentials to manage cars.</p>
+			<form id="loginForm" style="display:grid;gap:8px">
+				<input id="adminUser" placeholder="Username" style="padding:10px 12px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:8px" />
+				<input id="adminPass" type="password" placeholder="Password" style="padding:10px 12px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:8px" />
+				<button type="submit" style="padding:10px 12px;background:#3b82f6;color:#fff;border:none;border-radius:8px;cursor:pointer">Login</button>
+				<div id="loginMsg" style="color:#ef4444"></div>
+			</form>
+		</div>
+	</div>
+
+	<main id="adminMain" class="container" style="display:none">
+		<h2>Add Car</h2>
+		<form id="createForm" class="admin-form">
+			<input name="make" placeholder="Make" required />
+			<input name="model" placeholder="Model" required />
+			<input name="year" type="number" placeholder="Year" required />
+			<input name="price" type="number" placeholder="Price" required />
+			<input name="mileage" type="number" placeholder="Mileage" required />
+			<input name="thumbnail" placeholder="Thumbnail URL" />
+			<input id="thumbFile" type="file" accept="image/*" />
+			<input name="body" placeholder="Body" />
+			<input name="color" placeholder="Color" />
+			<input name="images" placeholder="Image URLs (comma separated)" />
+			<input id="galleryFiles" type="file" accept="image/*" multiple />
+			<button type="submit">Create</button>
+		</form>
+
+		<h2>Cars</h2>
+		<p style="color:#9aa3b2;margin:6px 0 10px">Select up to 3 featured cars to highlight on the home page.</p>
+		<table id="carsTable">
+			<thead>
+				<tr>
+					<th>Info</th>
+					<th>Price</th>
+					<th>Mileage</th>
+					<th>Featured</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</main>
+
+	<script>
+		(function(){
+			var gate = document.getElementById('loginGate');
+			var main = document.getElementById('adminMain');
+			var form = document.getElementById('loginForm');
+			var user = document.getElementById('adminUser');
+			var pass = document.getElementById('adminPass');
+			var msg = document.getElementById('loginMsg');
+			var OK = localStorage.getItem('carshop_admin_authed') === 'true';
+			function showApp(){ if (gate) gate.style.display='none'; if (main) main.style.display=''; }
+			if (OK) { showApp(); }
+			if (form) form.addEventListener('submit', function(e){
+				e.preventDefault();
+				if ((user.value||'') === '1' && (pass.value||'') === '1') {
+					localStorage.setItem('carshop_admin_authed','true');
+					showApp();
+				} else {
+					msg.textContent = 'Invalid credentials';
+				}
+			});
+		})();
+	</script>
+	<script src="admin.js"></script>
+</body>
+</html>
+

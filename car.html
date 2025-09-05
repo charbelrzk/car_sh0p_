@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Car details</title>
+	<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+	<header>
+		<h1><a href="inventory.html">← Back to Inventory</a></h1>
+		<nav>
+			<a href="index.html">Home</a>
+			<a href="inventory.html">Inventory</a>
+		</nav>
+	</header>
+
+	<main class="container" id="carPage">
+		<div id="carHeader"></div>
+		<div id="carGallery" class="gallery"></div>
+		<div id="carDetails" class="section"></div>
+		<div class="section">
+			<h3 class="section-title">Request information</h3>
+			<form id="leadForm">
+				<input name="name" placeholder="Your name" required />
+				<input name="email" type="email" placeholder="Your email" required />
+				<input name="phone" placeholder="Your phone" />
+				<textarea name="message" placeholder="Message"></textarea>
+				<button type="submit">Send</button>
+			</form>
+			<div id="leadMsg"></div>
+		</div>
+	</main>
+
+	<footer>© <span id="fy"></span> Car Shop</footer>
+
+	<script>
+		const STORAGE_KEY = 'carshop_cars';
+		const LEADS_KEY = 'carshop_leads';
+		function loadCars(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; } }
+		function qs(k){ return new URLSearchParams(location.search).get(k); }
+		function render(){
+			const id = qs('id');
+			const car = loadCars().find(c => c.id === id);
+			if (!car) { document.getElementById('carPage').innerHTML = '<p>Car not found.</p>'; return; }
+			document.getElementById('carHeader').innerHTML = `
+				<h2>${car.year} ${car.make} ${car.model}</h2>
+				<p>${car.body || ''} • ${car.color || ''} • ${car.mileage.toLocaleString()} mi</p>
+				<p><strong>$${car.price.toLocaleString()}</strong></p>
+			`;
+			const gallery = (car.images && car.images.length) ? car.images : (car.thumbnail ? [car.thumbnail] : []);
+			document.getElementById('carGallery').innerHTML = gallery.map(u => `<img src="${u}" alt="">`).join('');
+			document.getElementById('carDetails').innerHTML = `
+				<h3 class="section-title">Details</h3>
+				<ul class="badges">
+					<li class="badge">Make: ${car.make}</li>
+					<li class="badge">Model: ${car.model}</li>
+					<li class="badge">Year: ${car.year}</li>
+					<li class="badge">Body: ${car.body || '-'}</li>
+					<li class="badge">Color: ${car.color || '-'}</li>
+					<li class="badge">Mileage: ${car.mileage.toLocaleString()} mi</li>
+				</ul>
+			`;
+			const form = document.getElementById('leadForm');
+			const leadMsg = document.getElementById('leadMsg');
+			form.addEventListener('submit', (e) => {
+				e.preventDefault();
+				const fd = new FormData(form);
+				const payload = Object.fromEntries(fd.entries());
+				payload.id = crypto.randomUUID();
+				payload.carId = car.id;
+				payload.createdAt = new Date().toISOString();
+				const leads = JSON.parse(localStorage.getItem(LEADS_KEY) || '[]');
+				leads.push(payload);
+				localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
+				leadMsg.textContent = 'Thanks! We will contact you soon.';
+				form.reset();
+			});
+		}
+		document.getElementById('fy').textContent = new Date().getFullYear();
+		render();
+	</script>
+</body>
+</html>
+
