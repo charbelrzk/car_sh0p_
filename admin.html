@@ -35,18 +35,44 @@ image.png
 	<main id="adminMain" class="container" style="display:none">
 		<h2>Add Car</h2>
 		<form id="createForm" class="admin-form">
-			<input name="make" placeholder="Make" required />
-			<input name="model" placeholder="Model" required />
-			<input name="year" type="number" placeholder="Year" required />
-			<input name="price" type="number" placeholder="Price" required />
-			<input name="mileage" type="number" placeholder="Mileage" required />
-			<input name="thumbnail" placeholder="Thumbnail URL" />
-			<input id="thumbFile" type="file" accept="image/*" />
-			<input name="body" placeholder="Body" />
-			<input name="color" placeholder="Color" />
-			<input name="images" placeholder="Image URLs (comma separated)" />
-			<input id="galleryFiles" type="file" accept="image/*" multiple />
-			<button type="submit">Create</button>
+			<div class="form-section">
+				<h3>Basic Information</h3>
+				<input name="make" placeholder="Make" required />
+				<input name="model" placeholder="Model" required />
+				<input name="year" type="number" placeholder="Year" required />
+				<input name="price" type="number" placeholder="Price" required />
+				<input name="mileage" type="number" placeholder="Mileage" required />
+			</div>
+			
+			<div class="form-section">
+				<h3>Vehicle Details</h3>
+				<input name="body" placeholder="Body Style (e.g., Sedan, SUV, Coupe)" />
+				<input name="color" placeholder="Color" />
+				<input name="vin" placeholder="VIN Number" />
+				<input name="engine" placeholder="Engine (e.g., 2.0L 4-Cylinder)" />
+				<input name="transmission" placeholder="Transmission (e.g., Automatic, Manual)" />
+				<input name="fuelType" placeholder="Fuel Type (e.g., Gasoline, Hybrid, Electric)" />
+			</div>
+			
+			<div class="form-section">
+				<h3>Description</h3>
+				<textarea name="description" placeholder="Detailed description of the vehicle..." rows="4"></textarea>
+			</div>
+			
+			<div class="form-section">
+				<h3>Images</h3>
+				<input name="thumbnail" placeholder="Thumbnail URL" />
+				<input id="thumbFile" type="file" accept="image/*" />
+				<input name="images" placeholder="Image URLs (comma separated)" />
+				<input id="galleryFiles" type="file" accept="image/*" multiple />
+			</div>
+			
+			<div class="form-section">
+				<h3>Features</h3>
+				<label><input type="checkbox" name="featured" /> Featured Vehicle</label>
+			</div>
+			
+			<button type="submit">Create Car</button>
 		</form>
 
 		<h2>Cars</h2>
