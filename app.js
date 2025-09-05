@@ -109,13 +109,13 @@ function paginate(list, page, pageSize) {
 function renderGrid(data) {
 	grid.innerHTML = data.map(car => `
 		<div class="card">
-			<img src="${car.thumbnail}" alt="${car.make} ${car.model}" />
+			<img src="${car.thumbnail || 'https://via.placeholder.com/300x200?text=No+Image'}" alt="${car.make} ${car.model}" />
 			<div class="content">
-				<div class="row"><strong>${car.year} ${car.make} ${car.model}</strong><span>$${car.price.toLocaleString()}</span></div>
-				<div class="row"><span>${car.body || ''} • ${car.color || ''}</span><span>${car.mileage.toLocaleString()} mi</span></div>
+				<div class="row"><strong>${car.year} ${car.make} ${car.model}</strong><span>$${car.price ? car.price.toLocaleString() : '0'}</span></div>
+				<div class="row"><span>${car.body || ''} • ${car.color || ''}</span><span>${car.mileage ? car.mileage.toLocaleString() : '0'} mi</span></div>
 				<div class="actions">
-					<a class="view" href="car.html?id=${car.id}">View</a>
-					<button class="fav" data-id="${car.id}">♥</button>
+					<a class="view" href="car.html?id=${car.id}">View Details</a>
+					<button class="fav" data-id="${car.id}" title="Add to favorites">♥</button>
 				</div>
 			</div>
 		</div>
@@ -124,10 +124,22 @@ function renderGrid(data) {
 	const favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
 	Array.from(document.querySelectorAll('.fav')).forEach(btn => {
 		const id = btn.getAttribute('data-id');
-		if (favs.has(id)) btn.classList.add('active');
-		btn.addEventListener('click', () => {
+		if (favs.has(id)) {
+			btn.classList.add('active');
+			btn.title = 'Remove from favorites';
+		}
+		btn.addEventListener('click', (e) => {
+			e.preventDefault();
 			const list = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
-			if (list.has(id)) list.delete(id); else list.add(id);
+			if (list.has(id)) {
+				list.delete(id);
+				btn.title = 'Add to favorites';
+				btn.style.background = '#6b7280';
+			} else {
+				list.add(id);
+				btn.title = 'Remove from favorites';
+				btn.style.background = '#ef4444';
+			}
 			localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(list)));
 			btn.classList.toggle('active');
 		});

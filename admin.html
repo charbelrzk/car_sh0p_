@@ -27,6 +27,7 @@ image.png
 				<input id="adminUser" type="email" placeholder="Email" style="padding:10px 12px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:8px" />
 				<input id="adminPass" type="password" placeholder="Password" style="padding:10px 12px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:8px" />
 				<button type="submit" style="padding:10px 12px;background:#3b82f6;color:#fff;border:none;border-radius:8px;cursor:pointer">Login</button>
+				<a href="index.html" style="padding:10px 12px;background:#6b7280;color:#fff;border:none;border-radius:8px;cursor:pointer;text-align:center;text-decoration:none;display:block;">🏠 Home</a>
 				<div id="loginMsg" style="color:#ef4444"></div>
 			</form>
 		</div>
@@ -59,13 +60,29 @@ image.png
 				<textarea name="description" placeholder="Detailed description of the vehicle..." rows="4"></textarea>
 			</div>
 			
-			<div class="form-section">
-				<h3>Images</h3>
-				<input name="thumbnail" placeholder="Thumbnail URL" />
-				<input id="thumbFile" type="file" accept="image/*" />
-				<input name="images" placeholder="Image URLs (comma separated)" />
-				<input id="galleryFiles" type="file" accept="image/*" multiple />
-			</div>
+							<div class="form-section">
+					<h3>Images (Max 5 images per car)</h3>
+					<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+						<div>
+							<label style="display:block;color:#9aa3b2;margin-bottom:5px;font-size:14px;">Thumbnail (Main Image):</label>
+							<input name="thumbnail" placeholder="Thumbnail URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="thumbFile" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						</div>
+						<div>
+							<label style="display:block;color:#9aa3b2;margin-bottom:5px;font-size:14px;">Gallery Images:</label>
+							<input name="image1" placeholder="Image 1 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="galleryFile1" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input name="image2" placeholder="Image 2 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="galleryFile2" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input name="image3" placeholder="Image 3 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="galleryFile3" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input name="image4" placeholder="Image 4 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="galleryFile4" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input name="image5" placeholder="Image 5 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="galleryFile5" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						</div>
+					</div>
+				</div>
 			
 			<div class="form-section">
 				<h3>Features</h3>
@@ -89,6 +106,85 @@ image.png
 			</thead>
 			<tbody></tbody>
 		</table>
+	</main>
+
+	<!-- Edit Car Modal -->
+	<div id="editModal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.8);z-index:3000;">
+		<div style="width:min(1000px,98vw);max-height:95vh;background:#171a21;border:1px solid #242938;border-radius:12px;padding:25px;overflow-y:auto;">
+			<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+				<h2 style="margin:0;color:#e7e9ee;">Edit Car</h2>
+				<button id="closeEditModal" style="background:#dc2626;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;">✕ Close</button>
+			</div>
+			
+			<form id="editForm" class="admin-form" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+				<input type="hidden" id="editCarId" />
+				
+				<div class="form-section">
+					<h3 style="color:#e7e9ee;margin-bottom:15px;padding-bottom:8px;border-bottom:1px solid #242938;">Basic Information</h3>
+					<div style="display:grid;gap:12px;">
+						<input id="editMake" name="make" placeholder="Make" required style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						<input id="editModel" name="model" placeholder="Model" required style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						<input id="editYear" name="year" type="number" placeholder="Year" required style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						<input id="editPrice" name="price" type="number" placeholder="Price" required style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						<input id="editMileage" name="mileage" type="number" placeholder="Mileage" required style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+					</div>
+				</div>
+				
+				<div class="form-section">
+					<h3 style="color:#e7e9ee;margin-bottom:15px;padding-bottom:8px;border-bottom:1px solid #242938;">Vehicle Details</h3>
+					<div style="display:grid;gap:12px;">
+						<input id="editBody" name="body" placeholder="Body Style (e.g., Sedan, SUV, Coupe)" style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						<input id="editColor" name="color" placeholder="Color" style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						<input id="editVin" name="vin" placeholder="VIN Number" style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						<input id="editEngine" name="engine" placeholder="Engine (e.g., 2.0L 4-Cylinder)" style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						<input id="editTransmission" name="transmission" placeholder="Transmission (e.g., Automatic, Manual)" style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						<input id="editFuelType" name="fuelType" placeholder="Fuel Type (e.g., Gasoline, Hybrid, Electric)" style="padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+					</div>
+				</div>
+				
+				<div class="form-section" style="grid-column:1/-1;">
+					<h3 style="color:#e7e9ee;margin-bottom:15px;padding-bottom:8px;border-bottom:1px solid #242938;">Description</h3>
+					<textarea id="editDescription" name="description" placeholder="Detailed description of the vehicle..." rows="4" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;resize:vertical;"></textarea>
+				</div>
+				
+				<div class="form-section" style="grid-column:1/-1;">
+					<h3 style="color:#e7e9ee;margin-bottom:15px;padding-bottom:8px;border-bottom:1px solid #242938;">Images (Max 5 images per car)</h3>
+					<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+						<div>
+							<label style="display:block;color:#9aa3b2;margin-bottom:5px;font-size:14px;">Thumbnail (Main Image):</label>
+							<input id="editThumbnail" name="thumbnail" placeholder="Thumbnail URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="editThumbFile" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						</div>
+						<div>
+							<label style="display:block;color:#9aa3b2;margin-bottom:5px;font-size:14px;">Gallery Images:</label>
+							<input id="editImage1" name="image1" placeholder="Image 1 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="editGalleryFile1" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="editImage2" name="image2" placeholder="Image 2 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="editGalleryFile2" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="editImage3" name="image3" placeholder="Image 3 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="editGalleryFile3" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="editImage4" name="image4" placeholder="Image 4 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="editGalleryFile4" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="editImage5" name="image5" placeholder="Image 5 URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
+							<input id="editGalleryFile5" type="file" accept="image/*" style="width:100%;padding:8px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;" />
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-section" style="grid-column:1/-1;">
+					<h3 style="color:#e7e9ee;margin-bottom:15px;padding-bottom:8px;border-bottom:1px solid #242938;">Features</h3>
+					<label style="display:flex;align-items:center;gap:8px;color:#e7e9ee;">
+						<input id="editFeatured" type="checkbox" name="featured" style="transform:scale(1.2);" />
+						<span>Featured Vehicle (max 3)</span>
+					</label>
+				</div>
+				
+				<div style="grid-column:1/-1;display:flex;gap:15px;margin-top:25px;padding-top:20px;border-top:1px solid #242938;">
+					<button type="submit" style="flex:1;padding:15px;background:#3b82f6;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:600;">Update Car</button>
+					<button type="button" id="cancelEdit" style="flex:1;padding:15px;background:#6b7280;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:600;">Cancel</button>
+				</div>
+			</form>
+		</div>
 	</main>
 
 	<script type="module">

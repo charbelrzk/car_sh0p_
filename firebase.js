@@ -4,7 +4,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
 import { getFirestore, collection, doc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, arrayUnion, connectFirestoreEmulator } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js';
 
 const config = {
     apiKey: "AIzaSyC87832Gxt03UlZOSbxoU46hkKqF-Pvpkc",
@@ -148,9 +148,60 @@ export async function addImageToCar(id, fileOrUrl) {
 }
 
 async function uploadImage(file, path) {
+    console.log('Uploading image:', file.name, 'to path:', path);
     const ref = storageRef(storage, path);
     await uploadBytes(ref, file);
-    return getDownloadURL(ref);
+    const url = await getDownloadURL(ref);
+    console.log('Image uploaded successfully:', url);
+    return url;
+}
+
+// Enhanced image upload with progress tracking
+export async function uploadImageWithProgress(file, path, onProgress) {
+    if (!auth.currentUser) {
+        throw new Error('User must be authenticated to upload images');
+    }
+    
+    const ref = storageRef(storage, path);
+    
+    // Create upload task
+    const uploadTask = uploadBytes(ref, file);
+    
+    // Track upload progress
+    uploadTask.on('state_changed', 
+        (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            if (onProgress) onProgress(progress);
+        },
+        (error) => {
+            console.error('Upload error:', error);
+            throw error;
+        }
+    );
+    
+    await uploadTask;
+    const url = await getDownloadURL(ref);
+    return url;
+}
+
+// Delete image from storage
+export async function deleteImage(imageUrl) {
+    if (!auth.currentUser) {
+        throw new Error('User must be authenticated to delete images');
+    }
+    
+    try {
+        // Extract path from URL
+        const url = new URL(imageUrl);
+        const path = decodeURIComponent(url.pathname.split('/o/')[1].split('?')[0]);
+        const ref = storageRef(storage, path);
+        await deleteObject(ref);
+        console.log('Image deleted successfully:', path);
+        return true;
+    } catch (error) {
+        console.error('Error deleting image:', error);
+        return false;
+    }
 }
 
 // Also expose globally for non-module scripts if needed
@@ -162,7 +213,9 @@ window.carshop = Object.assign(window.carshop || {}, {
     createCar,
     updateCar,
     removeCar,
-    addImageToCar
+    addImageToCar,
+    uploadImageWithProgress,
+    deleteImage
 });
 
 
