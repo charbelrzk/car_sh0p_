@@ -62,7 +62,7 @@ image.png
 			
 							<div class="form-section">
 					<h3>Images (Max 5 images per car)</h3>
-					<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+					<div class="image-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
 						<div>
 							<label style="display:block;color:#9aa3b2;margin-bottom:5px;font-size:14px;">Thumbnail (Main Image):</label>
 							<input name="thumbnail" placeholder="Thumbnail URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
@@ -116,7 +116,7 @@ image.png
 				<button id="closeEditModal" style="background:#dc2626;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;">✕ Close</button>
 			</div>
 			
-			<form id="editForm" class="admin-form" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+			<form id="editForm" class="admin-form editModal" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
 				<input type="hidden" id="editCarId" />
 				
 				<div class="form-section">
@@ -149,7 +149,7 @@ image.png
 				
 				<div class="form-section" style="grid-column:1/-1;">
 					<h3 style="color:#e7e9ee;margin-bottom:15px;padding-bottom:8px;border-bottom:1px solid #242938;">Images (Max 5 images per car)</h3>
-					<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+					<div class="image-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
 						<div>
 							<label style="display:block;color:#9aa3b2;margin-bottom:5px;font-size:14px;">Thumbnail (Main Image):</label>
 							<input id="editThumbnail" name="thumbnail" placeholder="Thumbnail URL" style="width:100%;padding:10px;background:#11151d;color:#e7e9ee;border:1px solid #242938;border-radius:6px;margin-bottom:8px;" />
