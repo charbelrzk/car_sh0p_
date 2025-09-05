@@ -62,7 +62,8 @@
 		</table>
 	</main>
 
-	<script>
+	<script type="module">
+		import { signIn, listCars, createCar, updateCar, removeCar } from './firebase.js';
 		(function(){
 			var gate = document.getElementById('loginGate');
 			var main = document.getElementById('adminMain');
@@ -73,12 +74,13 @@
 			var OK = localStorage.getItem('carshop_admin_authed') === 'true';
 			function showApp(){ if (gate) gate.style.display='none'; if (main) main.style.display=''; }
 			if (OK) { showApp(); }
-			if (form) form.addEventListener('submit', function(e){
+			if (form) form.addEventListener('submit', async function(e){
 				e.preventDefault();
-				if ((user.value||'') === '1' && (pass.value||'') === '1') {
+				try {
+					await signIn(user.value, pass.value);
 					localStorage.setItem('carshop_admin_authed','true');
 					showApp();
-				} else {
+				} catch(err) {
 					msg.textContent = 'Invalid credentials';
 				}
 			});

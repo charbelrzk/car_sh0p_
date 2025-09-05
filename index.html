@@ -64,7 +64,8 @@
 			<a href="https://instagram.com/yourdealership" target="_blank" rel="noreferrer">Instagram</a>
 		</div>
 	</footer>
-	<script>
+	<script type="module">
+		import { listCars } from './firebase.js';
 		var fy = document.getElementById('footerYear');
 		if (fy) fy.textContent = new Date().getFullYear();
 
@@ -82,10 +83,10 @@
 			if (openBtn) openBtn.addEventListener('click', open);
 			if (backdrop) backdrop.addEventListener('click', close);
 		})();
-		function renderFeatured(){
+		async function renderFeatured(){
 			const wrap = document.getElementById('featured');
 			if (!wrap) return;
-			const all = loadCarsFromStorage();
+			const all = await listCars();
 			const featured = all.filter(c => c.featured);
 			const fallback = all.slice().sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
 			const pick = (featured.length ? featured : fallback).slice(0, 6);

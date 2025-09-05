@@ -1,16 +1,8 @@
-const STORAGE_KEY = 'carshop_cars';
-
-function loadCarsFromStorage() {
-	try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
-}
-
-function saveCarsToStorage(cars) {
-	localStorage.setItem(STORAGE_KEY, JSON.stringify(cars));
-}
+import { listCars, createCar, updateCar, removeCar } from './firebase.js';
 
 async function loadCars() {
 	const tableBody = document.querySelector('#carsTable tbody');
-	const data = loadCarsFromStorage();
+	const data = await listCars();
 	tableBody.innerHTML = data.map(car => `
 		<tr data-id="${car.id}">
 			<td>
@@ -53,21 +45,7 @@ async function onSave(e) {
 		thumbnail: tr.querySelector('.e-thumb').value.trim(),
 		featured: tr.querySelector('.e-featured').checked
 	};
-	const cars = loadCarsFromStorage();
-	const i = cars.findIndex(c => c.id === id);
-	if (i !== -1) cars[i] = { ...cars[i], ...payload };
-
-	// Enforce max 3 featured
-	const featuredIds = cars.filter(c => c.featured).map(c => c.id);
-	if (featuredIds.length > 3) {
-		// Uncheck the oldest featured beyond 3
-		const toUncheck = featuredIds.slice(0, featuredIds.length - 3);
-		for (const fid of toUncheck) {
-			const idx = cars.findIndex(c => c.id === fid);
-			if (idx !== -1) cars[idx].featured = false;
-		}
-	}
-	saveCarsToStorage(cars);
+	await updateCar(id, payload);
 	await loadCars();
 }
 
@@ -75,8 +53,7 @@ async function onDelete(e) {
 	const tr = e.target.closest('tr');
 	const id = tr.getAttribute('data-id');
 	if (!confirm('Delete this car?')) return;
-	const cars = loadCarsFromStorage().filter(c => c.id !== id);
-	saveCarsToStorage(cars);
+	await removeCar(id);
 	await loadCars();
 }
 
@@ -111,16 +88,12 @@ document.getElementById('createForm').addEventListener('submit', async (e) => {
 			fileImages.push(dataUrl);
 		}
 	}
-	payload.id = crypto.randomUUID();
 	payload.year = Number(payload.year);
 	payload.price = Number(payload.price);
 	payload.mileage = Number(payload.mileage);
-	payload.createdAt = new Date().toISOString();
 	const urlImages = payload.images ? payload.images.split(',').map(s => s.trim()).filter(Boolean) : [];
 	payload.images = [...urlImages, ...fileImages].slice(0, 10);
-	const cars = loadCarsFromStorage();
-	cars.unshift(payload);
-	saveCarsToStorage(cars);
+	await createCar(payload);
 	e.target.reset();
 	await loadCars();
 });
