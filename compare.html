@@ -193,9 +193,9 @@
 				Car Shop
 			</a>
 			<div class="footer-links">
-				<a href="mailto:sales@example.com">📧 Contact</a>
-				<a href="tel:+1234567890">📞 Call</a>
-				<a href="https://instagram.com/yourdealership" target="_blank" rel="noreferrer">📷 Instagram</a>
+				<a href="#" id="contactEmail">📧 Contact</a>
+				<a href="#" id="contactPhone">📞 Call</a>
+				<a href="#" id="contactInstagram" target="_blank" rel="noreferrer">📷 Instagram</a>
 			</div>
 		</div>
 		<div class="footer-info">
@@ -203,9 +203,24 @@
 		</div>
 	</footer>
 
+	<!-- Configuration File -->
+	<script src="config.js"></script>
+
 	<script>
 		var fy = document.getElementById('footerYear');
 		if (fy) fy.textContent = new Date().getFullYear();
+		
+		// Update contact links from config
+		document.addEventListener('DOMContentLoaded', function() {
+			const contactEmail = document.getElementById('contactEmail');
+			const contactPhone = document.getElementById('contactPhone');
+			const contactInstagram = document.getElementById('contactInstagram');
+			
+			if (contactEmail) contactEmail.href = 'mailto:' + window.getContactEmail();
+			if (contactPhone) contactPhone.href = 'tel:' + window.getPhoneNumber();
+			if (contactInstagram) contactInstagram.href = window.getInstagramUrl();
+		});
+		
 		window.FIREBASE_CONFIG = {
 			apiKey: "AIzaSyC87832Gxt03UlZOSbxoU46hkKqF-Pvpkc",
 			authDomain: "car--shop.firebaseapp.com",

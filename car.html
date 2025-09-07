@@ -194,6 +194,12 @@
 
 	<footer>© <span id="footerYear"></span> Car Shop</footer>
 	
+	<!-- Configuration File -->
+	<script src="config.js"></script>
+	
+	<!-- EmailJS -->
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+	
 	<script>
 		window.FIREBASE_CONFIG = {
 			apiKey: "AIzaSyC87832Gxt03UlZOSbxoU46hkKqF-Pvpkc",
@@ -204,6 +210,9 @@
 			appId: "1:385403019174:web:c8a2c5a635d2bbbf0fb967",
 			measurementId: "G-B9KZCXJVK9"
 		};
+		
+		// EmailJS configuration from config file
+		window.EMAILJS_CONFIG = window.getEmailJSConfig();
 	</script>
 	<script type="module" src="car-detail.js"></script>
 </body>

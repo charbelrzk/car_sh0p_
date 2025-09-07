@@ -176,7 +176,12 @@ function renderCar() {
 		};
 
 		try {
+			// Save to Firebase
 			await createLead(inquiryData);
+			
+			// Send email notification
+			await sendEmailNotification(inquiryData);
+			
 			messageDiv.innerHTML = '<div style="color: green; margin-top: 15px;">Thank you! We will contact you soon about this vehicle.</div>';
 			form.reset();
 		} catch (error) {
@@ -207,6 +212,39 @@ function changeImage(index) {
 
 // Make changeImage globally available
 window.changeImage = changeImage;
+
+// Email notification function
+async function sendEmailNotification(inquiryData) {
+	try {
+		// Initialize EmailJS
+		emailjs.init(window.EMAILJS_CONFIG.publicKey);
+		
+		// Email template parameters
+		const templateParams = {
+			to_email: window.getContactEmail(), // Email from config file
+			from_name: inquiryData.name,
+			from_email: inquiryData.email,
+			phone: inquiryData.phone || 'Not provided',
+			car_info: inquiryData.carInfo,
+			car_id: inquiryData.carId,
+			message: inquiryData.message || 'No message provided',
+			date: new Date().toLocaleString()
+		};
+		
+		// Send email
+		const result = await emailjs.send(
+			window.EMAILJS_CONFIG.serviceId,
+			window.EMAILJS_CONFIG.templateId,
+			templateParams
+		);
+		
+		console.log('Email sent successfully:', result);
+		return result;
+	} catch (error) {
+		console.error('Error sending email:', error);
+		// Don't throw error - we still want to save to Firebase even if email fails
+	}
+}
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
